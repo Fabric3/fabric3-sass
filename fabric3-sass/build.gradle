@@ -1,5 +1,32 @@
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "com.gradle.publish:plugin-publish-plugin:0.9.4"
+  }
+}
+apply plugin: "com.gradle.plugin-publish"
+
 dependencies {
     compile('io.bit3:jsass:5.1.0')
+}
+
+pluginBundle {
+  website = 'http://www.fabric3.org/'
+  vcsUrl = 'https://github.com/Fabric3/fabric3-sass'
+  description = 'Plugin for Sass compilation and continuous build'
+  tags = ['saas', 'Fabric3']
+  version = '3.0.0'
+
+  plugins {
+    fabric3SaasPlugin {
+      id = 'org.fabric3.gradle.fabric3-sass'
+      displayName = 'Fabric3 Saas plugin'
+    }
+  }
 }
 
 

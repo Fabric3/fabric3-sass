@@ -11,6 +11,8 @@
  *
  * Note the 'uploadArchives' tasks requires a gradle.properties file to be present containing private key information and authentication parameters
  * (sonatypeUsername and sonatypePassword).
+ *
+ * To publish the plugin to the Gradle plugin repository, run the 'publishPlugins' task.
  */
 project.description = 'Fabric3 Gradle Sass plugin'
 

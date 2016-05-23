@@ -1,5 +1,3 @@
 rootProject.name = 'fabric3-sass-plugin'
 
 include ':fabric3-sass'
-
-//include ':integration-test:fabric3-test', ':integration-test:test-api', ':integration-test:test-extension'

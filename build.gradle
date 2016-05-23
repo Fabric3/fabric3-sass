@@ -48,7 +48,7 @@ def distributions() {
 
 configure(distributions()) {
     group = fabric3Group
-    version = fabric3Version
+    version = version
     def releaseBuild = !version.endsWith('SNAPSHOT');
 
     apply plugin: 'java'

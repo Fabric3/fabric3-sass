@@ -12,7 +12,7 @@ Add the plugin dependency to your build script:
  
     buildscript {
          dependencies {
-            classpath 'org.fabric3.gradle:fabric3-sass:3.0.0-SNAPSHOT'
+            classpath 'org.fabric3.gradle:fabric3-sass:[version]'
          }
     }
 

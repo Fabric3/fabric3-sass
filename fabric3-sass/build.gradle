@@ -23,7 +23,7 @@ pluginBundle {
 
   plugins {
     fabric3SaasPlugin {
-      id = 'org.fabric3.gradle.fabric3-sass'
+      id = 'fabric3-sass'
       displayName = 'Fabric3 Saas plugin'
     }
   }

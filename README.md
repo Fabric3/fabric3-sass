@@ -2,7 +2,7 @@ Fabric3 Sass Plugin
 =========================
 
 The Fabric3 Sass plugin provides compilation of Sass files as part of a Gradle build. The plugin is based on the LibSass library (http://sass-lang
-.com/libsass) for fast compilation.   
+.com/libsass) for fast compilation. The Fabric3 Sass plugin is licensed under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0).  
 
 
 Use

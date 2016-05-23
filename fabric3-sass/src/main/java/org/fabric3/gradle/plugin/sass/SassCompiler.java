@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 import io.bit3.jsass.CompilationException;
 import io.bit3.jsass.Options;
 import io.bit3.jsass.Output;
+import org.gradle.api.GradleException;
 import org.gradle.api.logging.Logger;
 
 /**
@@ -36,7 +37,7 @@ class SassCompiler {
         this.logger = logger;
     }
 
-    void compile(File inputFile, File outputFile) throws CompilationException {
+    void compile(File inputFile, File outputFile) {
 
         try {
             io.bit3.jsass.Compiler compiler = new io.bit3.jsass.Compiler();
@@ -47,8 +48,7 @@ class SassCompiler {
 
             logger.info("Sass compilation completed");
         } catch (CompilationException e) {
-            // do not throw the error as it will abort watch loops
-            logger.error("Sass compilation failed", e);
+            throw new GradleException("Sass compilation failed", e);
         }
     }
 
@@ -59,9 +59,6 @@ class SassCompiler {
      */
     void addIncludePaths(String... paths) {
         Stream<File> files = Arrays.stream(paths).map(File::new);
-        if (logger.isInfoEnabled()) {
-            files = files.peek(file -> logger.info(file.getPath()));
-        }
         files.forEach(options.getIncludePaths()::add);
     }
 

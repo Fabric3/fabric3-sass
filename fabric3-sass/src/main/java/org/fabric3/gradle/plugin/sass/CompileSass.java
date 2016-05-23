@@ -3,18 +3,41 @@ package org.fabric3.gradle.plugin.sass;
 import java.io.File;
 import java.nio.file.Paths;
 
-import io.bit3.jsass.CompilationException;
 import org.gradle.api.DefaultTask;
+import org.gradle.api.InvalidUserDataException;
 import org.gradle.api.tasks.TaskAction;
 
 /**
  * Task to compile a set of Sass files to CSS.
  */
 class CompileSass extends DefaultTask {
+    private SassExtension extension;
+    private File inputFile;
+    private File outputFile;
     private SassCompiler compiler;
 
     public CompileSass() {
         compiler = new SassCompiler(getLogger());
+        getProject().afterEvaluate(p -> {
+            extension = getProject().getExtensions().findByType(SassExtension.class);
+            if (extension == null) {
+                extension = new SassExtension();
+            }
+
+            inputFile = resolveInputFile(extension);
+            outputFile = resolveOutputFile(extension);
+
+            // setup inputs and outputs for up-to-date determination and watches
+            getInputs().dir(extension.getIncludePaths().split(","));
+            getInputs().dir(inputFile.getParent());
+            getOutputs().file(outputFile);
+
+            configureCompiler(extension);
+
+            if (extension.getSourceMapPath() != null) {
+                compiler.setSourceMapFile(resolveFile(extension.getSourceMapPath()));
+            }
+        });
     }
 
     public String getDescription() {
@@ -22,22 +45,7 @@ class CompileSass extends DefaultTask {
     }
 
     @TaskAction
-    public void compileSass() throws CompilationException {
-        SassExtension extension = getProject().getExtensions().findByType(SassExtension.class);
-        if (extension == null) {
-            extension = new SassExtension();
-        }
-
-        File inputFile = resolveInputFile(extension);
-
-        File outputFile = resolveOutputFile(extension);
-
-        configureCompiler(extension);
-
-        if (extension.getSourceMapPath() != null) {
-            compiler.setSourceMapFile(resolveFile(extension.getSourceMapPath()));
-        }
-
+    public void compileSass() {
         compiler.compile(inputFile, outputFile);
     }
 
@@ -55,19 +63,19 @@ class CompileSass extends DefaultTask {
 
     private File resolveInputFile(SassExtension extension) {
         if (extension.getInputFilePath() == null) {
-            throw new IllegalArgumentException("Parameter not specified: inputFilePath");
+            throw new InvalidUserDataException("Parameter not specified: inputFilePath");
         }
 
         File inputFile = resolveFile(extension.getInputFilePath());
         if (!inputFile.exists()) {
-            throw new IllegalArgumentException("Path does not exist: " + inputFile.getPath());
+            throw new InvalidUserDataException("Path does not exist: " + inputFile.getPath());
         }
         return inputFile;
     }
 
     private File resolveOutputFile(SassExtension extension) {
         if (extension.getOutputFilePath() == null) {
-            throw new IllegalArgumentException("Parameter not specified: outputFilePath");
+            throw new InvalidUserDataException("Parameter not specified: outputFilePath");
         }
         return resolveFile(extension.getOutputFilePath());
     }
